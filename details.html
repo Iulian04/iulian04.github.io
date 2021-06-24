@@ -52,7 +52,7 @@ close();
     </div>
     <div id="logo"> <a href="#"><img src="images/logo.png" alt="" border="0" width="182" height="85" /></a> </div>
   </div>
-<div  data-authorizedby-badge="footer"></div>
+ <div  data-authorizedby-badge="footer"></div>
 <div  data-authorizedby-badge="content"></div>
 
   <div id="main_content">
@@ -170,15 +170,62 @@ close();
 </div>
 <!-- end of main_container -->
 
-<!--<script src="https://app.stage.authorized.by/trustedretailers/badges.js"></script>
-<div data-authorizedby lang="de"></div>
-<div data-authorizedby-badge="sidebar"></div>-->
-  
-  <script  src="https://app.stage.authorized.by/trustedretailers/badges.js"></script>
-   <div  data-authorizedby  data-authorizedby-product=""
-data-authorizedby-brand="iuhuhuhu"  lang="Insert_language_here"></div>
-   <div  data-authorizedby-badge="sidebar"></div>
-`);
+(function() {
+  // You may set your local environment as badge API host.
+  // Keep in mind that if the badge is on a secure site, it'll try to contact the API through HTTPS.
+  var API_HOST = 'app.stage.authorized.by';
+  var API_PROTOCOL = 'https';
+  // If true, the badge will contain dummy partners.
+  var DUMMY_BADGE = false;
+  // If true, all the embedded badges will be appended to the body
+  var INJECT_EMBEDDED = true;
+  // Embedded container + their initialization selectors
+  var EMBEDDED_CONTAINERS = {
+    'embedded-partner': '',
+    'embedded-partner:large': '',
+    'embedded-original': '',
+    'embedded-original-oval': '.authorized-by-seal'
+  };
+  // If truthy, the badge becomes a product badge
+  var PRODUCT_BADGE = "04021572013829";
+  // Pass the badge settings here.
+  var BADGE_SETTINGS = {
+    enableMobile: true,
+    position: 'right-middle',
+    productId: PRODUCT_BADGE,
+    apiHost: API_PROTOCOL + '://' + API_HOST,
+    dummy: DUMMY_BADGE && DUMMY_DATA,
+    'embeddedOriginal.container.position': 'relative'
+  };
+  // ************************************************
+  // You usually won't need to change the stuff below
+  // ************************************************
+  var body = document.querySelector('body');
+  if (INJECT_EMBEDDED) {
+    Object.keys(EMBEDDED_CONTAINERS).forEach(attr => {
+      var root = body;
+      var embeddedPartnerTag = document.createElement('div');
+      embeddedPartnerTag.setAttribute('authorizedby', attr);
+      if (EMBEDDED_CONTAINERS[attr] && document.querySelector(EMBEDDED_CONTAINERS[attr])) {
+        var proposedRoot = document.querySelector(EMBEDDED_CONTAINERS[attr]);
+        if (!proposedRoot) console.warn("Container " + EMBEDDED_CONTAINERS[attr] + " not found");
+        else {
+          proposedRoot.innerHTML = '';
+          root = proposedRoot;
+        }
+      }
+      root.appendChild(embeddedPartnerTag);
+    });
+  }
+  var script = document.createElement('script');
+  script.setAttribute('src', API_PROTOCOL + '://' + API_HOST + '/trustedretailers/api.js');
+  body.appendChild(script);
+  script.onload = function() {
+    var initScript = document.createElement('script');
+    initScript.text = 'new window["AuthorizedByBadge"](' + JSON.stringify(BADGE_SETTINGS) + ').init();';
+    body.appendChild(initScript);
+  };
+})();
 
 </body>
 </html>
