@@ -170,7 +170,7 @@ close();
 </div>
 <!-- end of main_container -->
 
-(function() {
+<script>(function() {
   // You may set your local environment as badge API host.
   // Keep in mind that if the badge is on a secure site, it'll try to contact the API through HTTPS.
   var API_HOST = 'app.stage.authorized.by';
@@ -187,7 +187,7 @@ close();
     'embedded-original-oval': '.authorized-by-seal'
   };
   // If truthy, the badge becomes a product badge
-  var PRODUCT_BADGE = "04021572013829";
+  var PRODUCT_BADGE = 1;
   // Pass the badge settings here.
   var BADGE_SETTINGS = {
     enableMobile: true,
@@ -226,6 +226,6 @@ close();
     body.appendChild(initScript);
   };
 })();
-
+</script>
 </body>
 </html>
